@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AtCoder Weekday Contest Calendar</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', 'Meiryo', sans-serif;
+    background: #1e1e2e;
+    color: #e0e0e0;
+    padding: 20px;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #7eb8f0;
+  }
+  .calendar-container {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 24px;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  @media (max-width: 1200px) {
+    .calendar-container {
+      flex-wrap: wrap;
+    }
+  }
+  .month {
+    background: #2a2a3e;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    padding: 20px;
+  }
+  .month-title {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #ccc;
+  }
+  .weekday-header, .days {
+    display: grid;
+    grid-template-columns: repeat(7, 48px);
+    gap: 3px;
+    justify-content: center;
+  }
+  .weekday-header { margin-bottom: 3px; }
+  .weekday-header span {
+    width: 48px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.85em;
+    background: #3a3a52;
+    color: #bbb;
+  }
+  .weekday-header span:nth-child(6) { color: #64b5f6; }
+  .weekday-header span:nth-child(7) { color: #ef9a9a; }
+  .day {
+    width: 48px;
+    height: 56px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 0.95em;
+    position: relative;
+    border: 2px solid transparent;
+    color: #888;
+  }
+  .day.empty { background: transparent; }
+  .day.sun .day-num { color: #ef9a9a; }
+  .day.sat .day-num { color: #64b5f6; }
+  .day.contest {
+    background: #1e3a5a;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+  }
+  .day.contest .day-num { color: #90caf9; }
+  .day.contest:hover {
+    background: #28507a;
+    transform: scale(1.08);
+    z-index: 1;
+  }
+  .day.contest.today {
+    background: #4a4020;
+    border-color: #f9a825;
+  }
+  .day.contest.today .day-num { color: #ffe082; }
+  .day.contest.today:hover {
+    background: #5a5028;
+  }
+  .day.contest.past {
+    background: #1e4a35;
+  }
+  .day.contest.past .day-num { color: #a5d6a7; }
+  .day.contest.past:hover {
+    background: #286048;
+  }
+  .day-num { font-size: 0.7em; font-weight: bold; line-height: 1; color: inherit; }
+  .awc-prefix {
+    font-size: 0.45em;
+    font-weight: 600;
+    line-height: 1;
+    color: #78a8d8;
+    letter-spacing: 0.05em;
+    margin-top: 1px;
+  }
+  .awc-num {
+    font-size: 0.8em;
+    font-weight: 800;
+    line-height: 1;
+    color: #bbdefb;
+  }
+  .day.contest.past .awc-prefix { color: #6ab878; }
+  .day.contest.past .awc-num { color: #a5d6a7; }
+  .day.contest.today .awc-prefix { color: #d4a840; }
+  .day.contest.today .awc-num { color: #ffe082; }
+  .legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9em;
+    color: #ccc;
+  }
+  .legend-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+  }
+  .nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .nav button {
+    padding: 8px 20px;
+    border: none;
+    background: #3a5a8a;
+    color: #e0e0e0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  .nav button:hover { background: #4a6a9a; }
+  .nav span {
+    font-size: 1.1em;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    color: #ccc;
+  }
+  .disclaimer {
+    max-width: 800px;
+    margin: 32px auto 0;
+    padding: 16px 20px;
+    background: #2a2a3e;
+    border-radius: 8px;
+    color: #999;
+    font-size: 0.8em;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<h1>AtCoder Weekday Contest Calendar</h1>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-box" style="background:#1e4a35;"></div> 過去のコンテスト</div>
+  <div class="legend-item"><div class="legend-box" style="background:#1e3a5a;"></div> 今後のコンテスト</div>
+  <div class="legend-item"><div class="legend-box" style="background:#3d3520;border:2px solid #f9a825;"></div> 今日</div>
+</div>
+
+<div class="nav">
+  <button id="prev">&lt; 前へ</button>
+  <span id="range-label"></span>
+  <button id="next">次へ &gt;</button>
+</div>
+
+<div class="calendar-container" id="cal"></div>
+
+<div class="disclaimer">
+  <p>本サービスは有志の個人サービスであり、AtCoder 社が提供しているものではありません。AWC が同じペースで開催され続けることを前提にしたカレンダーであり、実情を反映したものとは限らない点にご注意ください</p>
+</div>
+
+<script>
+  // AWC0001 starts on 2026-02-09 (Mon), every weekday (Mon-Fri)
+  const AWC_START = new Date(2026, 1, 9); // Feb 9, 2026
+  const AWC_START_NUM = 1;
+
+  const TODAY = new Date();
+  TODAY.setHours(0, 0, 0, 0);
+
+  // Count weekdays between two dates (date1 <= date2)
+  function weekdaysBetween(date1, date2) {
+    let count = 0;
+    const d = new Date(date1);
+    while (d < date2) {
+      d.setDate(d.getDate() + 1);
+      const dow = d.getDay();
+      if (dow >= 1 && dow <= 5) count++;
+    }
+    return count;
+  }
+
+  // Get AWC number for a given date (null if not a weekday or before start)
+  function getAWCNumber(date) {
+    const dow = date.getDay();
+    if (dow === 0 || dow === 6) return null;
+    if (date < AWC_START) return null;
+    const diff = weekdaysBetween(AWC_START, date);
+    return AWC_START_NUM + diff;
+  }
+
+  // Format AWC number to 4-digit string
+  function awcId(num) {
+    return 'AWC' + String(num).padStart(4, '0');
+  }
+
+  function awcUrl(num) {
+    return 'https://atcoder.jp/contests/awc' + String(num).padStart(4, '0') + '/';
+  }
+
+  // Render a single month
+  function renderMonth(year, month) {
+    const container = document.createElement('div');
+    container.className = 'month';
+
+    const title = document.createElement('div');
+    title.className = 'month-title';
+    title.textContent = `${year}年${month + 1}月`;
+    container.appendChild(title);
+
+    const header = document.createElement('div');
+    header.className = 'weekday-header';
+    ['月', '火', '水', '木', '金', '土', '日'].forEach(d => {
+      const s = document.createElement('span');
+      s.textContent = d;
+      header.appendChild(s);
+    });
+    container.appendChild(header);
+
+    const daysDiv = document.createElement('div');
+    daysDiv.className = 'days';
+
+    const firstDay = (new Date(year, month, 1).getDay() + 6) % 7; // Mon=0, Sun=6
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    // Empty cells
+    for (let i = 0; i < firstDay; i++) {
+      const empty = document.createElement('div');
+      empty.className = 'day empty';
+      daysDiv.appendChild(empty);
+    }
+
+    for (let d = 1; d <= daysInMonth; d++) {
+      const date = new Date(year, month, d);
+      const dow = date.getDay();
+      const cell = document.createElement('div');
+      cell.className = 'day';
+
+      if (dow === 0) cell.classList.add('sun');
+      if (dow === 6) cell.classList.add('sat');
+
+      const num = getAWCNumber(date);
+      if (num !== null) {
+        cell.classList.add('contest');
+        if (date.getTime() === TODAY.getTime()) {
+          cell.classList.add('today');
+        } else if (date < TODAY) {
+          cell.classList.add('past');
+        }
+        cell.addEventListener('click', () => {
+          window.open(awcUrl(num), '_blank');
+        });
+        cell.title = `${awcId(num)} - ${year}/${month+1}/${d} 20:00`;
+
+        cell.appendChild(createDayNum(d));
+        const prefix = document.createElement('div');
+        prefix.className = 'awc-prefix';
+        prefix.textContent = 'AWC';
+        const numLabel = document.createElement('div');
+        numLabel.className = 'awc-num';
+        numLabel.textContent = String(num).padStart(4, '0');
+        cell.appendChild(prefix);
+        cell.appendChild(numLabel);
+      } else {
+        cell.appendChild(createDayNum(d));
+      }
+
+      daysDiv.appendChild(cell);
+    }
+
+    container.appendChild(daysDiv);
+    return container;
+  }
+
+  function createDayNum(d) {
+    const span = document.createElement('span');
+    span.className = 'day-num';
+    span.textContent = d;
+    return span;
+  }
+
+  // Page state: show 3 months at a time
+  const MONTHS_PER_PAGE = 3;
+
+  // Base month: Feb 2026
+  const BASE_YEAR = 2026;
+  const BASE_MONTH = 1; // Feb (0-indexed)
+
+  // Start at the page containing the current month
+  const todayMonthIndex = (TODAY.getFullYear() - BASE_YEAR) * 12 + TODAY.getMonth();
+  let pageOffset = Math.floor((todayMonthIndex - BASE_MONTH) / MONTHS_PER_PAGE);
+
+  function render() {
+    const cal = document.getElementById('cal');
+    cal.innerHTML = '';
+
+    const startMonthIndex = BASE_MONTH + pageOffset * MONTHS_PER_PAGE;
+
+    for (let i = 0; i < MONTHS_PER_PAGE; i++) {
+      const mIndex = startMonthIndex + i;
+      const year = BASE_YEAR + Math.floor(mIndex / 12);
+      const month = ((mIndex % 12) + 12) % 12;
+      cal.appendChild(renderMonth(year, month));
+    }
+
+    // Update label
+    const firstMIndex = startMonthIndex;
+    const lastMIndex = startMonthIndex + MONTHS_PER_PAGE - 1;
+    const fy = BASE_YEAR + Math.floor(firstMIndex / 12);
+    const fm = ((firstMIndex % 12) + 12) % 12 + 1;
+    const ly = BASE_YEAR + Math.floor(lastMIndex / 12);
+    const lm = ((lastMIndex % 12) + 12) % 12 + 1;
+    document.getElementById('range-label').textContent = `${fy}年${fm}月 〜 ${ly}年${lm}月`;
+  }
+
+  document.getElementById('prev').addEventListener('click', () => { pageOffset--; render(); });
+  document.getElementById('next').addEventListener('click', () => { pageOffset++; render(); });
+
+  render();
+</script>
+
+</body>
+</html>
