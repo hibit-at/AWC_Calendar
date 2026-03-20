@@ -11,11 +11,15 @@ import os
 import re
 import sys
 import time
+from datetime import date
 from pathlib import Path
 
 import requests
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
+
+sys.path.insert(0, str(Path(__file__).parent))
+from utils import contest_num_from_date
 
 load_dotenv()
 
@@ -27,14 +31,15 @@ FIELDNAMES = [
 
 
 def check_existing_contest(contest_id: str) -> None:
-    """同一コンテストのデータが既にあれば警告する"""
+    """同一コンテストのデータが既にあれば中止する"""
     if not RAW_DATA_FILE.exists() or RAW_DATA_FILE.stat().st_size == 0:
         return
     with open(RAW_DATA_FILE, encoding="utf-8", newline="") as f:
         reader = csv.DictReader(f)
         count = sum(1 for r in reader if r["contest_id"] == contest_id)
     if count > 0:
-        print(f"  ⚠ {contest_id} のデータが既に{count}件あります", file=sys.stderr)
+        print(f"エラー: {contest_id} のデータが既に{count}件存在します。中止します。", file=sys.stderr)
+        sys.exit(1)
 
 
 def append_rows(rows: list[dict]):
@@ -180,13 +185,15 @@ def scrape_submissions(html: str) -> list[dict]:
 
 def main():
     if len(sys.argv) < 2:
-        print(f"Usage: python {sys.argv[0]} <コンテスト番号> [--pages PAGES]", file=sys.stderr)
-        print(f"  例: python {sys.argv[0]} 29             # 全ページ取得", file=sys.stderr)
-        print(f"  例: python {sys.argv[0]} 29 --pages 5   # 1〜5ページ", file=sys.stderr)
-        print(f"  例: python {sys.argv[0]} 29 --pages 3-8 # 3〜8ページ", file=sys.stderr)
-        sys.exit(1)
-
-    contest_num = sys.argv[1]
+        num = contest_num_from_date(date.today())
+        if num is None:
+            print("エラー: 今日は AWC の開催日ではありません。コンテスト番号を指定してください。", file=sys.stderr)
+            print(f"  例: python {sys.argv[0]} 29", file=sys.stderr)
+            sys.exit(1)
+        print(f"引数なし: 本日のコンテスト AWC{num:04d} を対象にします。", file=sys.stderr)
+        contest_num = str(num)
+    else:
+        contest_num = sys.argv[1]
     contest_slug = f"awc{int(contest_num):04d}"
     base_url = f"https://atcoder.jp/contests/{contest_slug}/submissions"
 

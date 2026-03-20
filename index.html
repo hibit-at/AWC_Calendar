@@ -461,7 +461,7 @@
         <td><span class="rank-num ${rankClass(rank)}">${rank}</span></td>
         <td><a class="username-link" href="https://atcoder.jp/users/${username}" target="_blank">${username}</a></td>
         <td><span class="unique-ac">${unique_ac}</span></td>
-        <td><span class="total-min">${total_minutes}</span></td>
+        <td><span class="total-min">${total_minutes.toFixed(1)}</span></td>
       `;
       tbody.appendChild(tr);
     });
@@ -502,8 +502,8 @@
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td style="text-align:left"><a class="username-link" href="${taskUrl(contest_id, problem)}" target="_blank">${contest_id}-${problem}</a></td>
-        <td><span class="unique-ac">${unique_solvers}</span><span class="total-min">/${participants}</span></td>
-        <td><span class="total-min">${(reach_rate * 100).toFixed(1)}%</span></td>
+        <td><span class="total-min">${unique_solvers}/${participants}</span></td>
+        <td><span class="unique-ac">${(reach_rate * 100).toFixed(1)}%</span></td>
       `;
       tbody.appendChild(tr);
     });
@@ -550,8 +550,8 @@
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td style="text-align:left"><a class="username-link" href="${taskUrl(contest_id, problem)}" target="_blank">${contest_id}-${problem}</a></td>
-        <td><span class="unique-ac">${ac_count}</span><span class="total-min">/${total}</span></td>
-        <td><span class="total-min">${(accuracy_rate * 100).toFixed(1)}%</span></td>
+        <td><span class="total-min">${ac_count}/${total}</span></td>
+        <td><span class="unique-ac">${(accuracy_rate * 100).toFixed(1)}%</span></td>
       `;
       tbody.appendChild(tr);
     });

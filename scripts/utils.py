@@ -23,6 +23,19 @@ def contest_date(contest_num: int) -> date:
     return d
 
 
+def contest_num_from_date(d: date) -> int | None:
+    """日付からコンテスト番号を返す。平日以外または開始前は None。"""
+    if d < AWC_START_DATE or d.weekday() >= 5:  # 5=Sat, 6=Sun
+        return None
+    cur = AWC_START_DATE
+    count = 0
+    while cur < d:
+        cur += timedelta(days=1)
+        if cur.weekday() < 5:
+            count += 1
+    return AWC_START_NUM + count
+
+
 def contest_num_from_id(contest_id: str) -> int:
     """'AWC0029' -> 29"""
     return int(contest_id.replace("AWC", "").lstrip("0") or "0")
