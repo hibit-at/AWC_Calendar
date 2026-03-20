@@ -17,17 +17,27 @@
     margin-bottom: 24px;
     color: #7eb8f0;
   }
+
+  /* ページ全体レイアウト */
+  .page-layout {
+    display: flex;
+    gap: 32px;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  /* カレンダー側 */
+  .calendar-section { flex: 0 0 auto; }
+
   .calendar-container {
     display: flex;
     flex-wrap: nowrap;
     gap: 24px;
     justify-content: center;
-    margin: 0 auto;
   }
   @media (max-width: 1200px) {
-    .calendar-container {
-      flex-wrap: wrap;
-    }
+    .page-layout { flex-wrap: wrap; }
+    .calendar-container { flex-wrap: wrap; }
   }
   .month {
     background: #2a2a3e;
@@ -85,96 +95,128 @@
     transition: background 0.15s, transform 0.15s;
   }
   .day.contest .day-num { color: #90caf9; }
-  .day.contest:hover {
-    background: #28507a;
-    transform: scale(1.08);
-    z-index: 1;
-  }
-  .day.contest.today {
-    background: #4a4020;
-    border-color: #f9a825;
-  }
+  .day.contest:hover { background: #28507a; transform: scale(1.08); z-index: 1; }
+  .day.contest.today { background: #4a4020; border-color: #f9a825; }
   .day.contest.today .day-num { color: #ffe082; }
-  .day.contest.today:hover {
-    background: #5a5028;
-  }
-  .day.contest.past {
-    background: #1e4a35;
-  }
+  .day.contest.today:hover { background: #5a5028; }
+  .day.contest.past { background: #1e4a35; }
   .day.contest.past .day-num { color: #a5d6a7; }
-  .day.contest.past:hover {
-    background: #286048;
-  }
+  .day.contest.past:hover { background: #286048; }
   .day-num { font-size: 0.7em; font-weight: bold; line-height: 1; color: inherit; }
   .awc-prefix {
-    font-size: 0.45em;
-    font-weight: 600;
-    line-height: 1;
-    color: #78a8d8;
-    letter-spacing: 0.05em;
-    margin-top: 1px;
+    font-size: 0.45em; font-weight: 600; line-height: 1;
+    color: #78a8d8; letter-spacing: 0.05em; margin-top: 1px;
   }
-  .awc-num {
-    font-size: 0.8em;
-    font-weight: 800;
-    line-height: 1;
-    color: #bbdefb;
-  }
+  .awc-num { font-size: 0.8em; font-weight: 800; line-height: 1; color: #bbdefb; }
   .day.contest.past .awc-prefix { color: #6ab878; }
   .day.contest.past .awc-num { color: #a5d6a7; }
   .day.contest.today .awc-prefix { color: #d4a840; }
   .day.contest.today .awc-num { color: #ffe082; }
+
   .legend {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
+    display: flex; gap: 20px; justify-content: center;
+    margin-bottom: 20px; flex-wrap: wrap;
   }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.9em;
-    color: #ccc;
-  }
-  .legend-box {
-    width: 20px;
-    height: 20px;
-    border-radius: 4px;
-  }
-  .nav {
-    display: flex;
-    justify-content: center;
-    gap: 12px;
-    margin-bottom: 16px;
-  }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.9em; color: #ccc; }
+  .legend-box { width: 20px; height: 20px; border-radius: 4px; }
+  .nav { display: flex; justify-content: center; gap: 12px; margin-bottom: 16px; }
   .nav button {
-    padding: 8px 20px;
-    border: none;
-    background: #3a5a8a;
-    color: #e0e0e0;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 1em;
+    padding: 8px 20px; border: none; background: #3a5a8a;
+    color: #e0e0e0; border-radius: 6px; cursor: pointer; font-size: 1em;
   }
   .nav button:hover { background: #4a6a9a; }
   .nav span {
+    font-size: 1.1em; font-weight: bold;
+    display: flex; align-items: center; color: #ccc;
+  }
+
+  /* ランキング側 */
+  .ranking-col {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    flex: 0 0 auto;
+  }
+  .ranking-section {
+    flex: 0 0 auto;
+    background: #2a2a3e;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+    padding: 20px;
+    min-width: 280px;
+  }
+  .ranking-title {
+    text-align: center;
     font-size: 1.1em;
     font-weight: bold;
+    color: #ccc;
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #3a3a52;
+  }
+  .ranking-desc {
+    font-size: 0.78em;
+    color: #888;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #3a3a52;
+  }
+  .ranking-nav {
     display: flex;
     align-items: center;
-    color: #ccc;
+    justify-content: space-between;
+    margin-top: 12px;
+    gap: 8px;
   }
+  .ranking-nav button {
+    padding: 4px 12px;
+    border: none;
+    background: #3a5a8a;
+    color: #e0e0e0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em;
+  }
+  .ranking-nav button:hover:not(:disabled) { background: #4a6a9a; }
+  .ranking-nav button:disabled { background: #2a3a52; color: #555; cursor: default; }
+  .ranking-nav .page-info { font-size: 0.8em; color: #888; white-space: nowrap; }
+  .ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88em;
+  }
+  .ranking-table th {
+    color: #888;
+    font-weight: 600;
+    padding: 4px 8px;
+    text-align: right;
+    border-bottom: 1px solid #3a3a52;
+  }
+  .ranking-table th:nth-child(2) { text-align: left; }
+  .ranking-table td {
+    padding: 6px 8px;
+    text-align: right;
+    border-bottom: 1px solid #2e2e45;
+  }
+  .ranking-table td:nth-child(2) { text-align: left; }
+  .ranking-table tr:last-child td { border-bottom: none; }
+  .rank-num { color: #888; font-weight: bold; }
+  .rank-num.gold   { color: #ffd700; }
+  .rank-num.silver { color: #c0c0c0; }
+  .rank-num.bronze { color: #cd7f32; }
+  .username-link {
+    color: #90caf9;
+    text-decoration: none;
+  }
+  .username-link:hover { text-decoration: underline; }
+  .unique-ac { color: #a5d6a7; font-weight: bold; }
+  .total-min { color: #888; font-size: 0.95em; }
+
   .disclaimer {
-    max-width: 800px;
-    margin: 32px auto 0;
-    padding: 16px 20px;
-    background: #2a2a3e;
-    border-radius: 8px;
-    color: #999;
-    font-size: 0.8em;
-    line-height: 1.6;
+    max-width: 800px; margin: 32px auto 0;
+    padding: 16px 20px; background: #2a2a3e;
+    border-radius: 8px; color: #999; font-size: 0.8em; line-height: 1.6;
   }
 </style>
 </head>
@@ -194,21 +236,86 @@
   <button id="next">次へ &gt;</button>
 </div>
 
-<div class="calendar-container" id="cal"></div>
+<div class="page-layout">
+  <div class="calendar-section">
+    <div class="calendar-container" id="cal"></div>
+  </div>
+
+  <div class="ranking-col">
+    <div class="ranking-section">
+      <div class="ranking-title">User Ranking</div>
+      <p class="ranking-desc">Sorted by (UniqueAC, Total Solving Time)</p>
+      <table class="ranking-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>ユーザー</th>
+            <th>AC</th>
+            <th>分</th>
+          </tr>
+        </thead>
+        <tbody id="ranking-body"></tbody>
+      </table>
+      <div class="ranking-nav">
+        <button id="rank-prev">&lt; 前へ</button>
+        <span class="page-info" id="rank-page-info"></span>
+        <button id="rank-next">次へ &gt;</button>
+      </div>
+    </div>
+
+    <div class="ranking-section">
+      <div class="ranking-title">Unsolved Problem Ranking</div>
+      <p class="ranking-desc">Sorted by UniqueAC/Participants</p>
+      <table class="ranking-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">問題</th>
+            <th>AC</th>
+            <th>到達率</th>
+          </tr>
+        </thead>
+        <tbody id="reach-body"></tbody>
+      </table>
+      <div class="ranking-nav">
+        <button id="reach-prev">&lt; 前へ</button>
+        <span class="page-info" id="reach-page-info"></span>
+        <button id="reach-next">次へ &gt;</button>
+      </div>
+    </div>
+    <div class="ranking-section">
+      <div class="ranking-title">Fallible Problem Ranking</div>
+      <p class="ranking-desc">Sorted by TotalAC/TotalSubmissions</p>
+      <table class="ranking-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">問題</th>
+            <th>AC</th>
+            <th>正答率</th>
+          </tr>
+        </thead>
+        <tbody id="trap-body"></tbody>
+      </table>
+      <div class="ranking-nav">
+        <button id="trap-prev">&lt; 前へ</button>
+        <span class="page-info" id="trap-page-info"></span>
+        <button id="trap-next">次へ &gt;</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="disclaimer">
   <p>本サービスは有志の個人サービスであり、AtCoder 社が提供しているものではありません。AWC が同じペースで開催され続けることを前提にしたカレンダーであり、実情を反映したものとは限らない点にご注意ください</p>
+  <p>また、ランキングの集計における「AC」は、コンテスト時間中の提出のみを基準としています。</p>
 </div>
 
 <script>
-  // AWC0001 starts on 2026-02-09 (Mon), every weekday (Mon-Fri)
-  const AWC_START = new Date(2026, 1, 9); // Feb 9, 2026
+  // --- カレンダー ---
+  const AWC_START = new Date(2026, 1, 9);
   const AWC_START_NUM = 1;
-
   const TODAY = new Date();
   TODAY.setHours(0, 0, 0, 0);
 
-  // Count weekdays between two dates (date1 <= date2)
   function weekdaysBetween(date1, date2) {
     let count = 0;
     const d = new Date(date1);
@@ -220,25 +327,23 @@
     return count;
   }
 
-  // Get AWC number for a given date (null if not a weekday or before start)
   function getAWCNumber(date) {
     const dow = date.getDay();
     if (dow === 0 || dow === 6) return null;
     if (date < AWC_START) return null;
-    const diff = weekdaysBetween(AWC_START, date);
-    return AWC_START_NUM + diff;
+    return AWC_START_NUM + weekdaysBetween(AWC_START, date);
   }
 
-  // Format AWC number to 4-digit string
-  function awcId(num) {
-    return 'AWC' + String(num).padStart(4, '0');
+  function awcId(num) { return 'AWC' + String(num).padStart(4, '0'); }
+  function awcUrl(num) { return 'https://atcoder.jp/contests/awc' + String(num).padStart(4, '0') + '/'; }
+
+  function createDayNum(d) {
+    const span = document.createElement('span');
+    span.className = 'day-num';
+    span.textContent = d;
+    return span;
   }
 
-  function awcUrl(num) {
-    return 'https://atcoder.jp/contests/awc' + String(num).padStart(4, '0') + '/';
-  }
-
-  // Render a single month
   function renderMonth(year, month) {
     const container = document.createElement('div');
     container.className = 'month';
@@ -250,7 +355,7 @@
 
     const header = document.createElement('div');
     header.className = 'weekday-header';
-    ['月', '火', '水', '木', '金', '土', '日'].forEach(d => {
+    ['月','火','水','木','金','土','日'].forEach(d => {
       const s = document.createElement('span');
       s.textContent = d;
       header.appendChild(s);
@@ -260,10 +365,9 @@
     const daysDiv = document.createElement('div');
     daysDiv.className = 'days';
 
-    const firstDay = (new Date(year, month, 1).getDay() + 6) % 7; // Mon=0, Sun=6
+    const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    // Empty cells
     for (let i = 0; i < firstDay; i++) {
       const empty = document.createElement('div');
       empty.className = 'day empty';
@@ -275,23 +379,16 @@
       const dow = date.getDay();
       const cell = document.createElement('div');
       cell.className = 'day';
-
       if (dow === 0) cell.classList.add('sun');
       if (dow === 6) cell.classList.add('sat');
 
       const num = getAWCNumber(date);
       if (num !== null) {
         cell.classList.add('contest');
-        if (date.getTime() === TODAY.getTime()) {
-          cell.classList.add('today');
-        } else if (date < TODAY) {
-          cell.classList.add('past');
-        }
-        cell.addEventListener('click', () => {
-          window.open(awcUrl(num), '_blank');
-        });
+        if (date.getTime() === TODAY.getTime()) cell.classList.add('today');
+        else if (date < TODAY) cell.classList.add('past');
+        cell.addEventListener('click', () => window.open(awcUrl(num), '_blank'));
         cell.title = `${awcId(num)} - ${year}/${month+1}/${d} 20:00`;
-
         cell.appendChild(createDayNum(d));
         const prefix = document.createElement('div');
         prefix.className = 'awc-prefix';
@@ -304,7 +401,6 @@
       } else {
         cell.appendChild(createDayNum(d));
       }
-
       daysDiv.appendChild(cell);
     }
 
@@ -312,40 +408,23 @@
     return container;
   }
 
-  function createDayNum(d) {
-    const span = document.createElement('span');
-    span.className = 'day-num';
-    span.textContent = d;
-    return span;
-  }
-
-  // Page state: show 3 months at a time
   const MONTHS_PER_PAGE = 3;
-
-  // Base month: Feb 2026
-  const BASE_YEAR = 2026;
-  const BASE_MONTH = 1; // Feb (0-indexed)
-
-  // Start at the page containing the current month
+  const BASE_YEAR = 2026, BASE_MONTH = 1;
   const todayMonthIndex = (TODAY.getFullYear() - BASE_YEAR) * 12 + TODAY.getMonth();
   let pageOffset = Math.floor((todayMonthIndex - BASE_MONTH) / MONTHS_PER_PAGE);
 
   function render() {
     const cal = document.getElementById('cal');
     cal.innerHTML = '';
-
     const startMonthIndex = BASE_MONTH + pageOffset * MONTHS_PER_PAGE;
-
     for (let i = 0; i < MONTHS_PER_PAGE; i++) {
       const mIndex = startMonthIndex + i;
       const year = BASE_YEAR + Math.floor(mIndex / 12);
       const month = ((mIndex % 12) + 12) % 12;
       cal.appendChild(renderMonth(year, month));
     }
-
-    // Update label
     const firstMIndex = startMonthIndex;
-    const lastMIndex = startMonthIndex + MONTHS_PER_PAGE - 1;
+    const lastMIndex  = startMonthIndex + MONTHS_PER_PAGE - 1;
     const fy = BASE_YEAR + Math.floor(firstMIndex / 12);
     const fm = ((firstMIndex % 12) + 12) % 12 + 1;
     const ly = BASE_YEAR + Math.floor(lastMIndex / 12);
@@ -355,8 +434,172 @@
 
   document.getElementById('prev').addEventListener('click', () => { pageOffset--; render(); });
   document.getElementById('next').addEventListener('click', () => { pageOffset++; render(); });
-
   render();
+
+  // --- ランキング ---
+  const PAGE_SIZE = 10;
+  let rankingData = [];
+  let rankPage = 0;
+
+  function rankClass(rank) {
+    if (rank === 1) return 'gold';
+    if (rank === 2) return 'silver';
+    if (rank === 3) return 'bronze';
+    return '';
+  }
+
+  function renderRanking() {
+    const tbody = document.getElementById('ranking-body');
+    const totalPages = Math.ceil(rankingData.length / PAGE_SIZE);
+    const start = rankPage * PAGE_SIZE;
+    const page = rankingData.slice(start, start + PAGE_SIZE);
+
+    tbody.innerHTML = '';
+    page.forEach(({ rank, username, unique_ac, total_minutes }) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><span class="rank-num ${rankClass(rank)}">${rank}</span></td>
+        <td><a class="username-link" href="https://atcoder.jp/users/${username}" target="_blank">${username}</a></td>
+        <td><span class="unique-ac">${unique_ac}</span></td>
+        <td><span class="total-min">${total_minutes}</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('rank-page-info').textContent =
+      `${start + 1}–${Math.min(start + PAGE_SIZE, rankingData.length)} / ${rankingData.length}`;
+    document.getElementById('rank-prev').disabled = rankPage === 0;
+    document.getElementById('rank-next').disabled = rankPage >= totalPages - 1;
+  }
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',');
+    return lines.slice(1).map(line => {
+      const cols = line.split(',');
+      return Object.fromEntries(headers.map((h, i) => [h.trim(), cols[i]?.trim()]));
+    });
+  }
+
+  function taskUrl(contest_id, problem) {
+    const slug = contest_id.toLowerCase();
+    return `https://atcoder.jp/contests/${slug}/tasks/${slug}_${problem.toLowerCase()}`;
+  }
+
+  // reach ranking
+  const REACH_PAGE_SIZE = 5;
+  let reachData = [];
+  let reachPage = 0;
+
+  function renderReach() {
+    const tbody = document.getElementById('reach-body');
+    const totalPages = Math.ceil(reachData.length / REACH_PAGE_SIZE);
+    const start = reachPage * REACH_PAGE_SIZE;
+    const page = reachData.slice(start, start + REACH_PAGE_SIZE);
+
+    tbody.innerHTML = '';
+    page.forEach(({ contest_id, problem, unique_solvers, participants, reach_rate }) => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="text-align:left"><a class="username-link" href="${taskUrl(contest_id, problem)}" target="_blank">${contest_id}-${problem}</a></td>
+        <td><span class="unique-ac">${unique_solvers}</span><span class="total-min">/${participants}</span></td>
+        <td><span class="total-min">${(reach_rate * 100).toFixed(1)}%</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('reach-page-info').textContent =
+      `${start + 1}–${Math.min(start + REACH_PAGE_SIZE, reachData.length)} / ${reachData.length}`;
+    document.getElementById('reach-prev').disabled = reachPage === 0;
+    document.getElementById('reach-next').disabled = reachPage >= totalPages - 1;
+  }
+
+  document.getElementById('reach-prev').addEventListener('click', () => { reachPage--; renderReach(); });
+  document.getElementById('reach-next').addEventListener('click', () => { reachPage++; renderReach(); });
+
+  fetch('data/reach_ranking.csv')
+    .then(r => r.text())
+    .then(text => {
+      reachData = parseCSV(text).map(r => ({
+        contest_id:     r.contest_id,
+        problem:        r.problem,
+        unique_solvers: parseInt(r.unique_solvers),
+        participants:   parseInt(r.participants),
+        reach_rate:     parseFloat(r.reach_rate),
+      }));
+      renderReach();
+    })
+    .catch(() => {
+      document.getElementById('reach-body').innerHTML =
+        '<tr><td colspan="4" style="color:#888;text-align:center;padding:12px;">CSVを読み込めませんでした</td></tr>';
+    });
+
+  // trap ranking
+  let trapData = [];
+  let trapPage = 0;
+
+  function renderTrap() {
+    const tbody = document.getElementById('trap-body');
+    const totalPages = Math.ceil(trapData.length / REACH_PAGE_SIZE);
+    const start = trapPage * REACH_PAGE_SIZE;
+    const page = trapData.slice(start, start + REACH_PAGE_SIZE);
+
+    tbody.innerHTML = '';
+    page.forEach(({ contest_id, problem, ac_count, penalty_count, accuracy_rate }) => {
+      const total = ac_count + penalty_count;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="text-align:left"><a class="username-link" href="${taskUrl(contest_id, problem)}" target="_blank">${contest_id}-${problem}</a></td>
+        <td><span class="unique-ac">${ac_count}</span><span class="total-min">/${total}</span></td>
+        <td><span class="total-min">${(accuracy_rate * 100).toFixed(1)}%</span></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById('trap-page-info').textContent =
+      `${start + 1}–${Math.min(start + REACH_PAGE_SIZE, trapData.length)} / ${trapData.length}`;
+    document.getElementById('trap-prev').disabled = trapPage === 0;
+    document.getElementById('trap-next').disabled = trapPage >= totalPages - 1;
+  }
+
+  document.getElementById('trap-prev').addEventListener('click', () => { trapPage--; renderTrap(); });
+  document.getElementById('trap-next').addEventListener('click', () => { trapPage++; renderTrap(); });
+
+  fetch('data/trap_ranking.csv')
+    .then(r => r.text())
+    .then(text => {
+      trapData = parseCSV(text).map(r => ({
+        contest_id:    r.contest_id,
+        problem:       r.problem,
+        ac_count:      parseInt(r.ac_count),
+        penalty_count: parseInt(r.penalty_count),
+        accuracy_rate: parseFloat(r.accuracy_rate),
+      }));
+      renderTrap();
+    })
+    .catch(() => {
+      document.getElementById('trap-body').innerHTML =
+        '<tr><td colspan="3" style="color:#888;text-align:center;padding:12px;">CSVを読み込めませんでした</td></tr>';
+    });
+
+  document.getElementById('rank-prev').addEventListener('click', () => { rankPage--; renderRanking(); });
+  document.getElementById('rank-next').addEventListener('click', () => { rankPage++; renderRanking(); });
+
+  fetch('data/unique_ac_ranking.csv')
+    .then(r => r.text())
+    .then(text => {
+      rankingData = parseCSV(text).map(r => ({
+        rank:          parseInt(r.rank),
+        username:      r.username,
+        unique_ac:     parseInt(r.unique_ac),
+        total_minutes: parseFloat(r.total_minutes),
+      }));
+      renderRanking();
+    })
+    .catch(() => {
+      document.getElementById('ranking-body').innerHTML =
+        '<tr><td colspan="4" style="color:#888;text-align:center;padding:12px;">CSVを読み込めませんでした</td></tr>';
+    });
 </script>
 
 </body>
