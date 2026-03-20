@@ -96,8 +96,9 @@
   }
   .day.contest .day-num { color: #90caf9; }
   .day.contest:hover { background: #28507a; transform: scale(1.08); z-index: 1; }
-  .day.contest.today { background: #4a4020; border-color: #f9a825; }
-  .day.contest.today .day-num { color: #ffe082; }
+  .day.today { border-color: #f9a825; }
+  .day.today .day-num { color: #ffe082; }
+  .day.contest.today { background: #4a4020; }
   .day.contest.today:hover { background: #5a5028; }
   .day.contest.past { background: #1e4a35; }
   .day.contest.past .day-num { color: #a5d6a7; }
@@ -382,10 +383,11 @@
       if (dow === 0) cell.classList.add('sun');
       if (dow === 6) cell.classList.add('sat');
 
+      const isToday = date.getTime() === TODAY.getTime();
       const num = getAWCNumber(date);
       if (num !== null) {
         cell.classList.add('contest');
-        if (date.getTime() === TODAY.getTime()) cell.classList.add('today');
+        if (isToday) cell.classList.add('today');
         else if (date < TODAY) cell.classList.add('past');
         cell.addEventListener('click', () => window.open(awcUrl(num), '_blank'));
         cell.title = `${awcId(num)} - ${year}/${month+1}/${d} 20:00`;
@@ -399,6 +401,7 @@
         cell.appendChild(prefix);
         cell.appendChild(numLabel);
       } else {
+        if (isToday) cell.classList.add('today');
         cell.appendChild(createDayNum(d));
       }
       daysDiv.appendChild(cell);
