@@ -187,9 +187,8 @@ def main():
     if len(sys.argv) < 2:
         num = contest_num_from_date(date.today())
         if num is None:
-            print("エラー: 今日は AWC の開催日ではありません。コンテスト番号を指定してください。", file=sys.stderr)
-            print(f"  例: python {sys.argv[0]} 29", file=sys.stderr)
-            sys.exit(1)
+            print("今日は AWC の開催日ではありません。スキップします。", file=sys.stderr)
+            sys.exit(0)
         print(f"引数なし: 本日のコンテスト AWC{num:04d} を対象にします。", file=sys.stderr)
         contest_num = str(num)
     else:
