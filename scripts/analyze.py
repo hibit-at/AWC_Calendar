@@ -138,8 +138,18 @@ def main():
     with open(RAW_DATA_FILE, encoding="utf-8", newline="") as f:
         rows = list(csv.DictReader(f))
 
-    valid_dates = load_valid_dates(rows)
-    valid_rows = [r for r in rows if is_valid(r, valid_dates)]
+    seen_ids: set[str] = set()
+    unique_rows = []
+    for r in rows:
+        sid = r["submission_id"]
+        if sid not in seen_ids:
+            seen_ids.add(sid)
+            unique_rows.append(r)
+    if len(unique_rows) < len(rows):
+        print(f"重複除去: {len(rows) - len(unique_rows)}件スキップ")
+
+    valid_dates = load_valid_dates(unique_rows)
+    valid_rows = [r for r in unique_rows if is_valid(r, valid_dates)]
 
     analyze_unique_ac(valid_rows, valid_dates)
     analyze_difficulty(valid_rows)
