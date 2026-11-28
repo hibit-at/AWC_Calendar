@@ -60,14 +60,25 @@ def fetch_html(url: str) -> tuple[str, requests.Response]:
     }
     cookies = {}
     session_val = os.environ.get("ATCODER_SESSION")
-    if session_val:
-        cookies["REVEL_SESSION"] = session_val
-    else:
-        print("  ⚠ ATCODER_SESSION 環境変数が未設定（ログインなしでアクセス）", file=sys.stderr)
+    if not session_val:
+        # 提出一覧はログイン必須なので、未設定なら取得しても必ず0件になる
+        fail("ATCODER_SESSION 環境変数が未設定です。")
+    cookies["REVEL_SESSION"] = session_val
 
     resp = requests.get(url, headers=headers, cookies=cookies, timeout=30)
     resp.raise_for_status()
+    if "/login" in resp.url:
+        fail(
+            f"ログインページにリダイレクトされました（{resp.url}）。"
+            "ATCODER_SESSION の期限切れの可能性があります。"
+        )
     return resp.text, resp
+
+
+def fail(message: str) -> None:
+    """エラーを出して異常終了する（GitHub Actions を失敗させるため）"""
+    print(f"エラー: {message}", file=sys.stderr)
+    sys.exit(1)
 
 
 def parse_contest_id(soup: BeautifulSoup) -> str | None:
@@ -221,6 +232,8 @@ def main():
         submissions = scrape_submissions(html)
 
         if not submissions:
+            if page == start_page:
+                fail(f"{page_url} から提出データを1件も取得できませんでした。")
             print(f"  → 提出データ0件、終了", file=sys.stderr)
             break
 
